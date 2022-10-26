@@ -365,6 +365,10 @@ final public class Apphud: NSObject {
         Apphud.subscription()?.isActive() ?? false
     }
 
+    @objc public static func hasActiveSubscription2() -> Bool {
+            true
+        }
+
     /**
      Permission groups configured in Apphud dashboard > Product Hub > Products. Groups are cached on device.
      Note that this method may be `nil` at first launch of the app.
