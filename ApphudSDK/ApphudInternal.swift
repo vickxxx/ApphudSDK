@@ -20,7 +20,7 @@ internal typealias ApphudRetryLog = (count: Int, errorCode: Int)
 @available(iOS 11.2, *)
 public class ApphudInternal: NSObject {
 
-    internal static let shared = ApphudInternal()
+    public static let shared = ApphudInternal()
     internal var httpClient: ApphudHttpClient?
     internal weak var delegate: ApphudDelegate?
     internal weak var uiDelegate: ApphudUIDelegate?
@@ -51,7 +51,7 @@ public class ApphudInternal: NSObject {
     internal var observerModePurchasePaywallIdentifier: String?
 
     // MARK: - User registering properties
-    internal var currentUser: ApphudUser?
+    public var currentUser: ApphudUser?
     internal var currentDeviceID: String = ""
     internal var currentUserID: String = ""
     internal var setNeedsToUpdateUser: Bool = false {
