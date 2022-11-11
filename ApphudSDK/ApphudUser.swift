@@ -11,7 +11,7 @@ import Foundation
 private let ApphudUserCacheKey = "ApphudUserCacheKey"
 
 @available(OSX 10.14.4, *)
-internal struct ApphudUser {
+ public struct ApphudUser {
     /**
      Unique user identifier. This can be updated later.
      */

@@ -18,7 +18,7 @@ internal typealias ApphudRetryLog = (count: Int, errorCode: Int)
 
 @available(OSX 10.14.4, *)
 @available(iOS 11.2, *)
- class ApphudInternal: NSObject {
+public class ApphudInternal: NSObject {
 
     internal static let shared = ApphudInternal()
     internal var httpClient: ApphudHttpClient?
