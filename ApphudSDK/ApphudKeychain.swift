@@ -30,26 +30,26 @@ let kSecMatchLimitOneValue = NSString(format: kSecMatchLimitOne)
 
 public class ApphudKeychain: NSObject {
 
-    internal class func generateUUID() -> String {
+    public class func generateUUID() -> String {
         let uuid = NSUUID.init().uuidString
         return uuid
     }
 
-    internal class func loadDeviceID() -> String? {
+    public class func loadDeviceID() -> String? {
         if let deviceID = UserDefaults.standard.value(forKey: defaultsDeviceIdKey) as? String, deviceID.count > 0 {
             return deviceID
         }
         return self.load(deviceIdKey)
     }
 
-    internal class func loadUserID() -> String? {
+    public class func loadUserID() -> String? {
         if let userID = UserDefaults.standard.value(forKey: defaultsUserIdKey) as? String, userID.count > 0 {
             return userID
         }
         return self.load(userIdKey)
     }
 
-    internal class func resetValues() {
+    public class func resetValues() {
         saveUserID(userID: "")
         saveDeviceID(deviceID: "")
     }
@@ -65,12 +65,12 @@ public class ApphudKeychain: NSObject {
         self.save(deviceIdKey, data: deviceID)
     }
     #else
-    internal class func saveUserID(userID: String) {
+    public class func saveUserID(userID: String) {
         UserDefaults.standard.set(userID, forKey: defaultsUserIdKey)
         self.save(userIdKey, data: userID)
     }
 
-    internal class func saveDeviceID(deviceID: String) {
+    public class func saveDeviceID(deviceID: String) {
         UserDefaults.standard.set(deviceID, forKey: defaultsDeviceIdKey)
         self.save(deviceIdKey, data: deviceID)
     }

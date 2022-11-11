@@ -17,11 +17,11 @@ public let ApphudDidFinishTransactionNotification = Notification.Name(rawValue: 
 
 @available(OSX 10.14.4, *)
 @available(iOS 11.2, *)
-internal class ApphudStoreKitWrapper: NSObject, SKPaymentTransactionObserver, SKRequestDelegate {
+public class ApphudStoreKitWrapper: NSObject, SKPaymentTransactionObserver, SKRequestDelegate {
     static var shared = ApphudStoreKitWrapper()
 
-    internal var products = [SKProduct]()
-    internal var didFetch: Bool = false
+    public var products = [SKProduct]()
+    public var didFetch: Bool = false
 
     fileprivate let fetcher = ApphudProductsFetcher()
     fileprivate let singleFetcher = ApphudProductsFetcher()
@@ -32,7 +32,7 @@ internal class ApphudStoreKitWrapper: NSObject, SKPaymentTransactionObserver, SK
 
     private var refreshRequest: SKReceiptRefreshRequest?
 
-    internal var productsLoadTime: TimeInterval = 0.0
+    public var productsLoadTime: TimeInterval = 0.0
     
     func setupObserver() {
         SKPaymentQueue.default().add(self)
@@ -170,7 +170,7 @@ internal class ApphudStoreKitWrapper: NSObject, SKPaymentTransactionObserver, SK
             .forEach { transaction in finishTransaction(transaction) }
     }
 
-    internal func finishTransaction(_ transaction: SKPaymentTransaction) {
+    public func finishTransaction(_ transaction: SKPaymentTransaction) {
         apphudLog("Finish Transaction: \(transaction.payment.productIdentifier), state: \(transaction.transactionState.rawValue), id: \(transaction.transactionIdentifier ?? "")")
         NotificationCenter.default.post(name: ApphudWillFinishTransactionNotification, object: transaction)
         SKPaymentQueue.default().finishTransaction(transaction)
@@ -324,7 +324,7 @@ extension SKPaymentQueue {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
     
-    @objc internal func apphudAdd(_ payment: SKPayment) {
+    @objc public func apphudAdd(_ payment: SKPayment) {
         let currentUsername = payment.applicationUsername
         let currentUsernameIsUUID = (currentUsername != nil) && (UUID(uuidString: currentUsername!) != nil)
         

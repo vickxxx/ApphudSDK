@@ -105,9 +105,9 @@ public class ApphudSubscription: NSObject {
      */
     @objc public let isIntroductoryActivated: Bool
 
-    @objc internal let id: String
+    @objc public let id: String
 
-    @objc internal let groupId: String
+    @objc public let groupId: String
 
     // MARK: - Private methods
 

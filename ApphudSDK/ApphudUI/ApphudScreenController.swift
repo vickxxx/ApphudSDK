@@ -45,10 +45,10 @@ class ApphudScreenController: UIViewController {
         return wv
     }()
 
-    internal var isPurchasing = false
-    internal var error: Error?
-    internal var originalHTML: String?
-    internal var macrosesMap = [[String: String]]()
+    public var isPurchasing = false
+    public var error: Error?
+    public var originalHTML: String?
+    public var macrosesMap = [[String: String]]()
 
     private(set) var rule: ApphudRule
     private(set) var screenID: String
@@ -87,7 +87,7 @@ class ApphudScreenController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    internal func loadScreenPage() {
+    public func loadScreenPage() {
 
         // if after 30 seconds webview not appeared, then fail
         self.perform(#selector(failedByTimeOut), with: nil, afterDelay: 30.0)
@@ -108,7 +108,7 @@ class ApphudScreenController: UIViewController {
         }
     }
 
-    @objc internal func editAndReloadPage(html: String) {
+    @objc public func editAndReloadPage(html: String) {
         let url = URL(string: ApphudHttpClient.shared.domainUrlString)
         self.webView.tag = 1
         self.webView.loadHTMLString(html as String, baseURL: url)
@@ -159,7 +159,7 @@ class ApphudScreenController: UIViewController {
         failed(ApphudError(message: "Timeout error"))
     }
 
-    @objc internal func failed(_ error: Error) {
+    @objc public func failed(_ error: Error) {
         // for now just dismiss
         self.error = error
         apphudLog("Could not show screen with error: \(error)", forceDisplay: true)
@@ -224,7 +224,7 @@ class ApphudScreenController: UIViewController {
         }
     }
 
-    internal func addObserverIfNeeded() {
+    public func addObserverIfNeeded() {
         if !addedObserver {
             NotificationCenter.default.addObserver(self, selector: #selector(replaceMacroses), name: Apphud.didFetchProductsNotification(), object: nil)
             addedObserver = true
@@ -265,7 +265,7 @@ class ApphudScreenController: UIViewController {
         loadedCallback = nil
     }
 
-    internal func purchaseProduct(productID: String?, offerID: String?) {
+    public func purchaseProduct(productID: String?, offerID: String?) {
 
         guard let product = ApphudStoreKitWrapper.shared.products.first(where: {$0.productIdentifier == productID}) else {
             apphudLog("Aborting purchase because couldn't find product with id: \(productID ?? "")", forceDisplay: true)
@@ -305,11 +305,11 @@ class ApphudScreenController: UIViewController {
         }
     }
 
-    internal func closeTapped() {
+    public func closeTapped() {
         dismiss()
     }
 
-    internal func dismiss() {
+    public func dismiss() {
 
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(failedByTimeOut), object: nil)
 
@@ -332,7 +332,7 @@ class ApphudScreenController: UIViewController {
         }
     }
 
-    internal func restoreTapped() {
+    public func restoreTapped() {
         self.startLoading()
         Apphud.restorePurchases { subscriptions, _, _ in
             self.stopLoading()
@@ -342,7 +342,7 @@ class ApphudScreenController: UIViewController {
         }
     }
 
-    internal func thankForFeedbackAndClose(isSurvey: Bool) {
+    public func thankForFeedbackAndClose(isSurvey: Bool) {
 
         let action = ApphudInternal.shared.uiDelegate?.apphudScreenDismissAction?(screenName: screen?.name ?? rule.screen_name, controller: self) ?? .thankAndClose
 
@@ -365,7 +365,7 @@ class ApphudScreenController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    internal func handleBillingIssueTapped() {
+    public func handleBillingIssueTapped() {
         ApphudInternal.shared.trackEvent(params: ["rule_id": self.rule.id, "screen_id": self.screenID, "name": "$billing_issue"]) {}
         self.dismiss()
         if let url = URL(string: "https://apps.apple.com/account/billing"), UIApplication.shared.canOpenURL(url) {

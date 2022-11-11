@@ -12,7 +12,7 @@ import StoreKit
 @available(OSX 10.14.4, *)
 extension ApphudInternal {
 
-    @objc internal func continueToFetchProducts(needToUpdateProductGroups: Bool = true) {
+    @objc public func continueToFetchProducts(needToUpdateProductGroups: Bool = true) {
         if let productIDs = delegate?.apphudProductIdentifiers?(), productIDs.count > 0 {
             let products = productIDs.map { ApphudProduct(id: $0, name: $0, productId: $0, store: "app_store", skProduct: nil) }
             let group = ApphudGroup(id: "Untitled", name: "Untitled", products: products)
@@ -74,7 +74,7 @@ extension ApphudInternal {
         apphudLog("No Product Identifiers found in Apphud. Probably you forgot to add products in Apphud Settings? Scheduled products fetch retry in \(delay) seconds.", forceDisplay: true)
     }
 
-    internal func continueToFetchStoreKitProducts() {
+    public func continueToFetchStoreKitProducts() {
 
         guard self.productGroups.count > 0 else {
             return
@@ -109,7 +109,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func refreshStoreKitProductsWithCallback(callback: (([SKProduct], Error?) -> Void)?) {
+    public func refreshStoreKitProductsWithCallback(callback: (([SKProduct], Error?) -> Void)?) {
 
         callback.map { self.customProductsFetchedBlocks.append($0) }
 
@@ -149,7 +149,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func preparePaywalls(pwls: [ApphudPaywall], writeToCache: Bool = true, completionBlock: (([ApphudPaywall]?, Error?) -> Void)?) {
+    public func preparePaywalls(pwls: [ApphudPaywall], writeToCache: Bool = true, completionBlock: (([ApphudPaywall]?, Error?) -> Void)?) {
         
         if UserDefaults.standard.bool(forKey: swizzlePaymentDisabledKey) != true {
             ApphudStoreKitWrapper.shared.enableSwizzle()
@@ -204,7 +204,7 @@ extension ApphudInternal {
 
     // MARK: - Product Groups Helper Methods
 
-    internal var allAvailableProducts: [ApphudProduct] {
+    public var allAvailableProducts: [ApphudProduct] {
         var products = [ApphudProduct]()
         productGroups.forEach { group in
             products.append(contentsOf: group.products)
@@ -212,7 +212,7 @@ extension ApphudInternal {
         return products
     }
 
-    internal func updatePaywallsWithStoreKitProducts(paywalls: [ApphudPaywall]) {
+    public func updatePaywallsWithStoreKitProducts(paywalls: [ApphudPaywall]) {
         performWhenUserRegistered {
             self.paywallsAreReady = true
             self.paywallsLoadTime = Date().timeIntervalSince(self.initDate)
@@ -227,7 +227,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func updateProductGroupsWithStoreKitProducts() {
+    public func updateProductGroupsWithStoreKitProducts() {
         productGroups.forEach { group in
             group.products.forEach { product in
                 product.skProduct = ApphudStoreKitWrapper.shared.products.first(where: { $0.productIdentifier == product.productId })
@@ -235,7 +235,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func groupID(productId: String) -> String? {
+    public func groupID(productId: String) -> String? {
 
         for group in productGroups {
             let productIds = group.products.map { $0.productId }
@@ -247,7 +247,7 @@ extension ApphudInternal {
         return nil
     }
 
-    internal func cacheGroups(groups: [ApphudGroup]) {
+    public func cacheGroups(groups: [ApphudGroup]) {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         if let data = try? encoder.encode(groups) {
@@ -255,7 +255,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func cachedGroups() -> (objects: [ApphudGroup]?, expired: Bool) {
+    public func cachedGroups() -> (objects: [ApphudGroup]?, expired: Bool) {
 
         let dataFromCache = apphudDataFromCache(key: "ApphudProductGroups", cacheTimeout: cacheTimeout)
         if let data = dataFromCache.objectsData {
@@ -269,7 +269,7 @@ extension ApphudInternal {
         return (nil, true)
     }
 
-    internal func cachePaywalls(paywalls: [ApphudPaywall]) {
+    public func cachePaywalls(paywalls: [ApphudPaywall]) {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         if let data = try? encoder.encode(paywalls) {
@@ -277,7 +277,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func cachedPaywalls() -> (objects: [ApphudPaywall]?, expired: Bool) {
+    public func cachedPaywalls() -> (objects: [ApphudPaywall]?, expired: Bool) {
 
         let dataFromCache = apphudDataFromCache(key: "ApphudPaywalls", cacheTimeout: cacheTimeout)
         if let data = dataFromCache.objectsData {

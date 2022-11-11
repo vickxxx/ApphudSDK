@@ -14,7 +14,7 @@ import UIKit
 
 #if os(iOS)
 @available(iOS 11.2, *)
-internal class ApphudRulesManager {
+public class ApphudRulesManager {
     static let shared = ApphudRulesManager()
     var pendingController: UIViewController?
 
@@ -22,7 +22,7 @@ internal class ApphudRulesManager {
 
     private var apsInfo: [AnyHashable: Any]?
 
-    @discardableResult internal func handleNotification(_ apsInfo: [AnyHashable: Any]) -> Bool {
+    @discardableResult public func handleNotification(_ apsInfo: [AnyHashable: Any]) -> Bool {
 
         guard let rule_id = apsInfo["rule_id"] as? String else {
             return false
@@ -40,7 +40,7 @@ internal class ApphudRulesManager {
         return true
     }
 
-    @objc internal func handlePendingAPSInfo() {
+    @objc public func handlePendingAPSInfo() {
 
         guard UIApplication.shared.applicationState == .active else {
             apphudLog("Got APS info, but app is not yet active, waiting for app to be active, then will handle push notification.", forceDisplay: true)
@@ -66,13 +66,13 @@ internal class ApphudRulesManager {
         }
     }
 
-    internal func handleRule(ruleID: String, data: [String: Any]?) {
+    public func handleRule(ruleID: String, data: [String: Any]?) {
         let dict = ["id": ruleID].merging(data ?? [:], uniquingKeysWith: {_, new in new})
         let rule = ApphudRule(dictionary: dict)
         self.handleRule(rule: rule)
     }
 
-    internal func handleRule(rule: ApphudRule) {
+    public func handleRule(rule: ApphudRule) {
 
         guard self.pendingController == nil else { return }
         guard rule.screen_id.count > 0 else { return }
@@ -97,7 +97,7 @@ internal class ApphudRulesManager {
         }
     }
 
-    internal func showPendingScreen() {
+    public func showPendingScreen() {
 
         guard self.pendingController != nil else { return }
 
@@ -111,7 +111,7 @@ internal class ApphudRulesManager {
         parent?.present(pendingController!, animated: true, completion: nil)
     }
 
-    internal func pendingRule() -> ApphudRule? {
+    public func pendingRule() -> ApphudRule? {
         if let nc = self.pendingController as? ApphudNavigationController, let screenController = nc.viewControllers.first as? ApphudScreenController {
             return screenController.rule
         } else {
@@ -119,7 +119,7 @@ internal class ApphudRulesManager {
         }
     }
 
-    internal func cacheActiveScreens() {
+    public func cacheActiveScreens() {
         ApphudInternal.shared.getActiveRuleScreens { ids in
             ids.forEach { id in
                 ApphudHttpClient.shared.loadScreenHtmlData(screenID: id) { _, _ in }

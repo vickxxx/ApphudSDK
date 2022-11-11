@@ -35,9 +35,9 @@ public class ApphudPaywall: NSObject, Codable {
 
     @objc public internal(set) var products: [ApphudProduct]
 
-    internal var id: String
+    public var id: String
     private var jsonString: String?
-    internal var name: String
+    public var name: String
 
     private enum CodingKeys: String, CodingKey {
         case id

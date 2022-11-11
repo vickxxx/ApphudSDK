@@ -39,7 +39,7 @@ public class ApphudProduct: NSObject, Codable {
 
     // MARK: - Private
 
-    internal var id: String?
+    public var id: String?
     @objc public internal(set) var paywallId: String?
 
     private enum CodingKeys: String, CodingKey {

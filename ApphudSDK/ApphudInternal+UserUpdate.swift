@@ -14,7 +14,7 @@ import UIKit
 @available(OSX 10.14.4, *)
 extension ApphudInternal {
 
-    @discardableResult internal func parseUser(_ dict: [String: Any]?) -> HasPurchasesChanges {
+    @discardableResult public func parseUser(_ dict: [String: Any]?) -> HasPurchasesChanges {
 
         guard let dataDict = dict?["data"] as? [String: Any] else {
             return (false, false)
@@ -69,7 +69,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func createOrGetUser(shouldUpdateUserID: Bool, skipRegistration: Bool = false, delay:Double = 0, callback: @escaping (Bool, Int) -> Void) {
+    public func createOrGetUser(shouldUpdateUserID: Bool, skipRegistration: Bool = false, delay:Double = 0, callback: @escaping (Bool, Int) -> Void) {
         if skipRegistration {
             apphudLog("Loading user from cache, because cache is not expired.")
             self.preparePaywalls(pwls: self.paywalls, writeToCache: false, completionBlock: nil)
@@ -114,7 +114,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func updateUserCurrencyIfNeeded(priceLocale: Locale?) {
+    public func updateUserCurrencyIfNeeded(priceLocale: Locale?) {
         guard let priceLocale = priceLocale else { return }
         guard let countryCode = priceLocale.regionCode else { return }
         guard let currencyCode = priceLocale.currencyCode else { return }
@@ -131,7 +131,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func updateUserID(userID: String) {
+    public func updateUserID(userID: String) {
 
         guard self.currentUserID != userID else {
             apphudLog("Will not update User ID to \(userID), because current value is the same")
@@ -151,7 +151,7 @@ extension ApphudInternal {
         }
     }
 
-    internal func grantPromotional(_ duration: Int, _ permissionGroup: ApphudGroup?, productId: String?, callback: ApphudBoolCallback?) {
+    public func grantPromotional(_ duration: Int, _ permissionGroup: ApphudGroup?, productId: String?, callback: ApphudBoolCallback?) {
         performWhenUserRegistered {
             self.grantPromotional(duration, permissionGroup, productId: productId) { (result, response, _, _, _, _) in
                 if result {
@@ -213,7 +213,7 @@ extension ApphudInternal {
         }
     }
 
-    @objc internal func updateCurrentUser() {
+    @objc public func updateCurrentUser() {
         createOrGetUser(shouldUpdateUserID: false) { _, _ in
             self.lastCheckDate = Date()
         }
@@ -264,7 +264,7 @@ extension ApphudInternal {
         return false
     }
 
-    internal func setUserProperty(key: ApphudUserPropertyKey, value: Any?, setOnce: Bool, increment: Bool = false) {
+    public func setUserProperty(key: ApphudUserPropertyKey, value: Any?, setOnce: Bool, increment: Bool = false) {
 
         guard let typeString = getType(value: value) else {
             let givenType = type(of: value)
@@ -286,7 +286,7 @@ extension ApphudInternal {
         }
     }
 
-    @objc internal func updateUserProperties() {
+    @objc public func updateUserProperties() {
         setNeedsToUpdateUserProperties = false
         guard pendingUserProperties.count > 0 else {return}
         var params = [String: Any]()

@@ -16,7 +16,7 @@ typealias ApphudVoidCallback = (() -> Void)
 typealias ApphudErrorCallback = ((Error?) -> Void)
 
 #if os(iOS)
-internal func apphudVisibleViewController() -> UIViewController? {
+public func apphudVisibleViewController() -> UIViewController? {
     var currentVC = UIApplication.shared.keyWindow?.rootViewController
     while let presentedVC = currentVC?.presentedViewController {
         currentVC = presentedVC
@@ -28,7 +28,7 @@ internal func apphudVisibleViewController() -> UIViewController? {
 @available(OSX 10.14.4, *)
 extension String {
     /// Helper method to parse date string into Date object
-    internal var apphudIsoDate: Date? {
+    public var apphudIsoDate: Date? {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withFractionalSeconds,
                                    .withInternetDateTime,
@@ -41,7 +41,7 @@ extension String {
         return apphudStandardIsoDate
     }
 
-    internal var appleReceiptDate: Date? {
+    public var appleReceiptDate: Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss VV"
         let date = formatter.date(from: self)
@@ -51,12 +51,12 @@ extension String {
         return apphudStandardIsoDate
     }
 
-    internal var apphudStandardIsoDate: Date? {
+    public var apphudStandardIsoDate: Date? {
         ISO8601DateFormatter().date(from: self)
     }
 }
 
-internal func apphudIsSandbox() -> Bool {
+public func apphudIsSandbox() -> Bool {
     if apphudIsSimulator() {
         return true
     } else {
@@ -76,15 +76,15 @@ private func apphudIsSimulator() -> Bool {
     #endif
 }
 
-internal func apphudDidMigrate() {
+public func apphudDidMigrate() {
     UserDefaults.standard.set(true, forKey: "ApphudSubscriptionsMigrated")
 }
 
-internal func apphudShouldMigrate() -> Bool {
+public func apphudShouldMigrate() -> Bool {
     return !UserDefaults.standard.bool(forKey: "ApphudSubscriptionsMigrated")
 }
 
-internal func apphudDataToCache(data: Data, key: String) {
+public func apphudDataToCache(data: Data, key: String) {
     if var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
         url.appendPathComponent(key)
         if FileManager.default.fileExists(atPath: url.path) {
@@ -94,7 +94,7 @@ internal func apphudDataToCache(data: Data, key: String) {
     }
 }
 
-internal func apphudDataFromCache(key: String, cacheTimeout: TimeInterval) -> (objectsData: Data?, expired: Bool) {
+public func apphudDataFromCache(key: String, cacheTimeout: TimeInterval) -> (objectsData: Data?, expired: Bool) {
     if var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
         url.appendPathComponent(key)
 
@@ -108,15 +108,15 @@ internal func apphudDataFromCache(key: String, cacheTimeout: TimeInterval) -> (o
     return (nil, true)
 }
 
-internal func apphudToUserDefaultsCache(dictionary: [String: String], key: String) {
+public func apphudToUserDefaultsCache(dictionary: [String: String], key: String) {
     UserDefaults.standard.set(dictionary, forKey: key)
 }
 
-internal func apphudFromUserDefaultsCache(key: String) -> [String: String]? {
+public func apphudFromUserDefaultsCache(key: String) -> [String: String]? {
     return UserDefaults.standard.object(forKey: key) as? [String: String]
 }
 
-internal func apphudPerformOnMainThread(callback: @escaping () -> Void) {
+public func apphudPerformOnMainThread(callback: @escaping () -> Void) {
     if Thread.isMainThread {
         callback()
     } else {
@@ -128,7 +128,7 @@ internal func apphudPerformOnMainThread(callback: @escaping () -> Void) {
 
 #if os(macOS)
 @available(OSX 10.14.4, *)
-internal func apphudCurrentDeviceMacParameters() -> [String: String] {
+public func apphudCurrentDeviceMacParameters() -> [String: String] {
     let app_version = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? ""
 
     var params: [String: String] = ["locale": Locale.current.identifier,
@@ -154,7 +154,7 @@ internal func apphudCurrentDeviceMacParameters() -> [String: String] {
 }
 
 #elseif os(watchOS)
-internal func apphudCurrentDeviceWatchParameters() -> [String: String] {
+public func apphudCurrentDeviceWatchParameters() -> [String: String] {
 
     let family: String = "Watch"
     let app_version = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? ""
@@ -186,7 +186,7 @@ internal func apphudCurrentDeviceWatchParameters() -> [String: String] {
 }
 
 #else
-internal func apphudCurrentDeviceiOSParameters() -> [String: String] {
+public func apphudCurrentDeviceiOSParameters() -> [String: String] {
 
     var family = ""
     switch UIDevice.current.userInterfaceIdiom {
@@ -241,14 +241,14 @@ extension UIDevice {
 #endif
 
 @available(OSX 10.14.4, *)
-internal func apphudIdentifierForAdvertising() -> String? {
+public func apphudIdentifierForAdvertising() -> String? {
     if let idfa = ApphudInternal.shared.advertisingIdentifier, idfa != "00000000-0000-0000-0000-000000000000" {
         return idfa
     }
     return nil
 }
 
-internal func apphudIsAppsFlyerSDKIntegrated() -> Bool {
+public func apphudIsAppsFlyerSDKIntegrated() -> Bool {
 
     if true {
         let klass: AnyClass? = NSClassFromString("AppsFlyerLib")
@@ -271,7 +271,7 @@ internal func apphudIsAppsFlyerSDKIntegrated() -> Bool {
     return false
 }
 
-internal func apphudGetAppsFlyerID() -> String? {
+public func apphudGetAppsFlyerID() -> String? {
 
     if true {
         let klass: AnyClass? = NSClassFromString("AppsFlyerLib")
@@ -312,7 +312,7 @@ internal func apphudGetAppsFlyerID() -> String? {
     return nil
 }
 
-internal func apphudIsAdjustSDKIntegrated() -> Bool {
+public func apphudIsAdjustSDKIntegrated() -> Bool {
 
     let klass: AnyClass? = NSClassFromString("Adjust")
     let managerClass = klass as AnyObject as? NSObjectProtocol
@@ -325,7 +325,7 @@ internal func apphudIsAdjustSDKIntegrated() -> Bool {
     return false
 }
 
-internal func apphudGetAdjustID() -> String? {
+public func apphudGetAdjustID() -> String? {
 
     let klass: AnyClass? = NSClassFromString("Adjust")
     let managerClass = klass as AnyObject as? NSObjectProtocol
@@ -341,15 +341,15 @@ internal func apphudGetAdjustID() -> String? {
     return nil
 }
 
-internal func apphudNeedsToCollectFBAnonID() -> Bool {
+public func apphudNeedsToCollectFBAnonID() -> Bool {
     true
 }
 
-internal func apphudIsFBSDKIntegrated() -> Bool {
+public func apphudIsFBSDKIntegrated() -> Bool {
     return NSClassFromString("FBSDKAppEvents") != nil || NSClassFromString("FBSDKBasicUtility") != nil
 }
 
-internal func apphudGetFBExtInfo() -> String? {
+public func apphudGetFBExtInfo() -> String? {
 
     let klass: AnyClass? = NSClassFromString("FBSDKAppEventsDeviceInfo")
     let managerClass = klass as AnyObject as? NSObjectProtocol
@@ -371,7 +371,7 @@ internal func apphudGetFBExtInfo() -> String? {
     return nil
 }
 
-internal func apphudGetFBAnonID() -> String? {
+public func apphudGetFBAnonID() -> String? {
 
     let klass: AnyClass? = NSClassFromString("FBSDKAppEvents")
     let managerClass = klass as AnyObject as? NSObjectProtocol
@@ -398,7 +398,7 @@ internal func apphudGetFBAnonID() -> String? {
     return nil
 }
 
-internal func apphudReceiptDataString() -> String? {
+public func apphudReceiptDataString() -> String? {
     guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL else {
         return nil
     }

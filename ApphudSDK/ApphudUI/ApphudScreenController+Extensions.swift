@@ -133,14 +133,14 @@ extension ApphudScreenController {
         }
     }
 
-    internal func handleReadNotificationsOnce() {
+    public func handleReadNotificationsOnce() {
         // perform only for initial screen in view controllers stack
         if self == navigationController?.viewControllers.first {
             ApphudInternal.shared.readAllNotifications(for: self.rule.id)
         }
     }
 
-    internal func handleScreenPresented() {
+    public func handleScreenPresented() {
         ApphudInternal.shared.trackEvent(params: ["rule_id": self.rule.id, "screen_id": self.screenID, "name": "$screen_presented"]) {}
     }
 
@@ -159,7 +159,7 @@ extension ApphudScreenController {
         }
     }
 
-    internal func handlePurchaseResult(product: SKProduct, offerID: String? = nil, result: ApphudPurchaseResult) {
+    public func handlePurchaseResult(product: SKProduct, offerID: String? = nil, result: ApphudPurchaseResult) {
 
         let errorCode: SKError.Code
         if let skError = result.transaction?.error as? SKError {
