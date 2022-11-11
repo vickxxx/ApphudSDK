@@ -15,7 +15,7 @@ extension ApphudInternal {
     // MARK: - Eligibilities API
 
     @available(iOS 12.2, *)
-    public func checkEligibilitiesForPromotionalOffers(products: [SKProduct], callback: @escaping ApphudEligibilityCallback) {
+    internal func checkEligibilitiesForPromotionalOffers(products: [SKProduct], callback: @escaping ApphudEligibilityCallback) {
 
         let result = performWhenUserRegistered {
 
@@ -82,7 +82,7 @@ extension ApphudInternal {
     }
 
     /// Checks introductory offers eligibility (includes free trial, pay as you go or pay up front)
-    public func checkEligibilitiesForIntroductoryOffers(products: [SKProduct], callback: @escaping ApphudEligibilityCallback) {
+    internal func checkEligibilitiesForIntroductoryOffers(products: [SKProduct], callback: @escaping ApphudEligibilityCallback) {
 
         let result = performWhenUserRegistered {
 

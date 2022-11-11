@@ -33,19 +33,19 @@ class ApphudLoggerService {
 
     // MARK: - Paywalls logs
 
-    public func paywallShown(_ paywallId: String?) {
+    internal func paywallShown(_ paywallId: String?) {
         ApphudInternal.shared.trackPaywallEvent(params: ["name": "paywall_shown", "properties": ["paywall_id": paywallId ?? ""] ])
     }
 
-    public func paywallClosed(_ paywallId: String?) {
+    internal func paywallClosed(_ paywallId: String?) {
         ApphudInternal.shared.trackPaywallEvent(params: ["name": "paywall_closed", "properties": ["paywall_id": paywallId ?? ""] ])
     }
 
-    public func paywallCheckoutInitiated(_ paywallId: String?, _ productId: String?) {
+    internal func paywallCheckoutInitiated(_ paywallId: String?, _ productId: String?) {
         ApphudInternal.shared.trackPaywallEvent(params: ["name": "paywall_checkout_initiated", "properties": ["paywall_id": paywallId ?? "", "product_id": productId ?? ""] ])
     }
 
-    public func paywallPaymentCancelled(_ paywallId: String?, _ productId: String?, _ error: SKError) {
+    internal func paywallPaymentCancelled(_ paywallId: String?, _ productId: String?, _ error: SKError) {
         if error.code == SKError.Code.paymentCancelled {
             ApphudInternal.shared.trackPaywallEvent(params: ["name": "paywall_payment_cancelled", "properties": ["paywall_id": paywallId ?? "", "product_id": productId ?? ""] ])
         } else {
@@ -59,7 +59,7 @@ class ApphudLoggerService {
 
     // MARK: - Duration Logs
 
-    public func add(key: DurationLog, value: Double, retryLog: ApphudRetryLog) {
+    internal func add(key: DurationLog, value: Double, retryLog: ApphudRetryLog) {
         if durationLogs.count != 0 {
             durationLogsTimer.invalidate()
         }

@@ -20,8 +20,8 @@ public class ApphudRule: NSObject {
     @objc public let screen_name: String
 
     // Private
-    public let id: String
-    public let screen_id: String
+    internal let id: String
+    internal let screen_id: String
 
     // MARK: - Private methods
 

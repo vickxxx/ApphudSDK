@@ -21,7 +21,7 @@ internal typealias ApphudRetryLog = (count: Int, errorCode: Int)
 public class ApphudInternal: NSObject {
 
     public static let shared = ApphudInternal()
-    public var httpClient: ApphudHttpClient?
+    internal var httpClient: ApphudHttpClient?
     internal weak var delegate: ApphudDelegate?
     internal weak var uiDelegate: ApphudUIDelegate?
 
@@ -32,29 +32,29 @@ public class ApphudInternal: NSObject {
 
     // MARK: - Receipt and products properties
 
-    public var customPaywallsLoadedCallbacks = [ApphudPaywallsCallback]()
-    public var productGroupsFetchedCallbacks = [ApphudVoidCallback]()
-    public var storeKitProductsFetchedCallbacks = [ApphudVoidCallback]()
-    public var customProductsFetchedBlocks = [ApphudStoreKitProductsCallback]()
-    public var paywallsAreReady = false
-    public var productGroups = [ApphudGroup]()
-    public var paywalls = [ApphudPaywall]()
+    internal var customPaywallsLoadedCallbacks = [ApphudPaywallsCallback]()
+    internal var productGroupsFetchedCallbacks = [ApphudVoidCallback]()
+    internal var storeKitProductsFetchedCallbacks = [ApphudVoidCallback]()
+    internal var customProductsFetchedBlocks = [ApphudStoreKitProductsCallback]()
+    internal var paywallsAreReady = false
+    internal var productGroups = [ApphudGroup]()
+    internal var paywalls = [ApphudPaywall]()
 
-    public var submitReceiptRetries: ApphudRetryLog = (0, 0)
-    public var submitReceiptCallbacks = [ApphudErrorCallback?]()
-    public var restorePurchasesCallback: (([ApphudSubscription]?, [ApphudNonRenewingPurchase]?, Error?) -> Void)?
-    public var isSubmittingReceipt: Bool = false
+    internal var submitReceiptRetries: ApphudRetryLog = (0, 0)
+    internal var submitReceiptCallbacks = [ApphudErrorCallback?]()
+    internal var restorePurchasesCallback: (([ApphudSubscription]?, [ApphudNonRenewingPurchase]?, Error?) -> Void)?
+    internal var isSubmittingReceipt: Bool = false
     
     // MARK: - Paywalls Events
-    public var lastUploadedPaywallEvent = [String: AnyHashable]()
-    public var lastUploadedPaywallEventDate: Date?
-    public var observerModePurchasePaywallIdentifier: String?
+    internal var lastUploadedPaywallEvent = [String: AnyHashable]()
+    internal var lastUploadedPaywallEventDate: Date?
+    internal var observerModePurchasePaywallIdentifier: String?
 
     // MARK: - User registering properties
     public var currentUser: ApphudUser?
-    public var currentDeviceID: String = ""
-    public var currentUserID: String = ""
-    public var setNeedsToUpdateUser: Bool = false {
+    internal var currentDeviceID: String = ""
+    internal var currentUserID: String = ""
+    internal var setNeedsToUpdateUser: Bool = false {
         didSet {
             if setNeedsToUpdateUser {
                 self.perform(#selector(updateCurrentUser), with: nil, afterDelay: 2.0)
@@ -63,7 +63,7 @@ public class ApphudInternal: NSObject {
             }
         }
     }
-    public var setNeedsToUpdateUserProperties: Bool = false {
+    internal var setNeedsToUpdateUserProperties: Bool = false {
         didSet {
             if setNeedsToUpdateUserProperties {
                 self.perform(#selector(updateUserProperties), with: nil, afterDelay: 1.0)
@@ -72,18 +72,18 @@ public class ApphudInternal: NSObject {
             }
         }
     }
-    public var pendingUserProperties = [ApphudUserProperty]()
-    public var lastCheckDate = Date()
-    public var userRegisterRetries: ApphudRetryLog = (0, 0)
-    public let maxNumberOfUserRegisterRetries: Int = 25
-    public var paywallEventsRetriesCount: Int = 0
-    public let maxNumberOfPaywallEventsRetries: Int = 25
-    public var productsFetchRetries: ApphudRetryLog = (0, 0)
-    public let maxNumberOfProductsFetchRetries: Int = 25
-    public var didRetrievePaywallsAtThisLaunch: Bool = false
-    public var initDate = Date()
-    public var paywallsLoadTime: TimeInterval = 0
-    public var isRegisteringUser = false {
+    internal var pendingUserProperties = [ApphudUserProperty]()
+    internal var lastCheckDate = Date()
+    internal var userRegisterRetries: ApphudRetryLog = (0, 0)
+    internal let maxNumberOfUserRegisterRetries: Int = 25
+    internal var paywallEventsRetriesCount: Int = 0
+    internal let maxNumberOfPaywallEventsRetries: Int = 25
+    internal var productsFetchRetries: ApphudRetryLog = (0, 0)
+    internal let maxNumberOfProductsFetchRetries: Int = 25
+    internal var didRetrievePaywallsAtThisLaunch: Bool = false
+    internal var initDate = Date()
+    internal var paywallsLoadTime: TimeInterval = 0
+    internal var isRegisteringUser = false {
         didSet {
             if isRegisteringUser {
                 NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(registerUser), object: nil)
@@ -93,7 +93,7 @@ public class ApphudInternal: NSObject {
 
     // MARK: - Advertising Identifier
 
-    public var advertisingIdentifier: String? {
+    internal var advertisingIdentifier: String? {
         didSet {
             if advertisingIdentifier != nil {
                 apphudLog("Received IDFA (\(advertisingIdentifier ?? ""), will submit soon.")
@@ -105,7 +105,7 @@ public class ApphudInternal: NSObject {
     }
 
     // MARK: - Attribution properties
-    public var requiresReceiptSubmission: Bool {
+    internal var requiresReceiptSubmission: Bool {
         get {
             UserDefaults.standard.bool(forKey: "requiresReceiptSubmissionKey")
         }
@@ -113,21 +113,21 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: "requiresReceiptSubmissionKey")
         }
     }
-    public let didSubmitAppsFlyerAttributionKey = "didSubmitAppsFlyerAttributionKey"
-    public let didSubmitFacebookAttributionKey = "didSubmitFacebookAttributionKey"
-    public let didSubmitAdjustAttributionKey = "didSubmitAdjustAttributionKey"
-    public let didSubmitProductPricesKey = "didSubmitProductPricesKey"
-    public let submittedFirebaseIdKey = "submittedFirebaseIdKey"
-    public let submittedAFDataKey = "submittedAFDataKey"
-    public let submittedAdjustDataKey = "submittedAdjustDataKey"
-    public var didSubmitAppleAdsAttributionKey = "didSubmitAppleAdsAttributionKey"
-    public let submittedPushTokenKey = "submittedPushTokenKey"
-    public let swizzlePaymentDisabledKey = "swizzlePaymentDisabledKey"
-    public var isSendingAppsFlyer = false
-    public var isSendingAdjust = false
-    public var isFreshInstall = true
+    internal let didSubmitAppsFlyerAttributionKey = "didSubmitAppsFlyerAttributionKey"
+    internal let didSubmitFacebookAttributionKey = "didSubmitFacebookAttributionKey"
+    internal let didSubmitAdjustAttributionKey = "didSubmitAdjustAttributionKey"
+    internal let didSubmitProductPricesKey = "didSubmitProductPricesKey"
+    internal let submittedFirebaseIdKey = "submittedFirebaseIdKey"
+    internal let submittedAFDataKey = "submittedAFDataKey"
+    internal let submittedAdjustDataKey = "submittedAdjustDataKey"
+    internal var didSubmitAppleAdsAttributionKey = "didSubmitAppleAdsAttributionKey"
+    internal let submittedPushTokenKey = "submittedPushTokenKey"
+    internal let swizzlePaymentDisabledKey = "swizzlePaymentDisabledKey"
+    internal var isSendingAppsFlyer = false
+    internal var isSendingAdjust = false
+    internal var isFreshInstall = true
 
-    public var didSubmitAppsFlyerAttribution: Bool {
+    internal var didSubmitAppsFlyerAttribution: Bool {
         get {
             UserDefaults.standard.bool(forKey: didSubmitAppsFlyerAttributionKey)
         }
@@ -135,7 +135,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: didSubmitAppsFlyerAttributionKey)
         }
     }
-    public var didSubmitFacebookAttribution: Bool {
+    internal var didSubmitFacebookAttribution: Bool {
         get {
             UserDefaults.standard.bool(forKey: didSubmitFacebookAttributionKey)
         }
@@ -143,7 +143,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: didSubmitFacebookAttributionKey)
         }
     }
-    public var didSubmitAdjustAttribution: Bool {
+    internal var didSubmitAdjustAttribution: Bool {
         get {
             UserDefaults.standard.bool(forKey: didSubmitAdjustAttributionKey)
         }
@@ -151,7 +151,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: didSubmitAdjustAttributionKey)
         }
     }
-    public var didSubmitProductPrices: Bool {
+    internal var didSubmitProductPrices: Bool {
         get {
             UserDefaults.standard.bool(forKey: didSubmitProductPricesKey)
         }
@@ -159,7 +159,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: didSubmitProductPricesKey)
         }
     }
-    public var didSubmitAppleAdsAttribution: Bool {
+    internal var didSubmitAppleAdsAttribution: Bool {
         get {
             UserDefaults.standard.bool(forKey: didSubmitAppleAdsAttributionKey)
         }
@@ -167,7 +167,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: didSubmitAppleAdsAttributionKey)
         }
     }
-    public var submittedAFData: [AnyHashable: Any]? {
+    internal var submittedAFData: [AnyHashable: Any]? {
         get {
             let cache = apphudDataFromCache(key: submittedAFDataKey, cacheTimeout: 86_400*7)
             if let data = cache.objectsData, !cache.expired,
@@ -183,7 +183,7 @@ public class ApphudInternal: NSObject {
             }
         }
     }
-    public var submittedAdjustData: [AnyHashable: Any]? {
+    internal var submittedAdjustData: [AnyHashable: Any]? {
         get {
             let cache = apphudDataFromCache(key: submittedAdjustDataKey, cacheTimeout: 86_400*7)
             if let data = cache.objectsData, !cache.expired,
@@ -199,7 +199,7 @@ public class ApphudInternal: NSObject {
             }
         }
     }
-    public var submittedFirebaseId: String? {
+    internal var submittedFirebaseId: String? {
         get {
             UserDefaults.standard.string(forKey: submittedFirebaseIdKey)
         }
@@ -207,7 +207,7 @@ public class ApphudInternal: NSObject {
             UserDefaults.standard.set(newValue, forKey: submittedFirebaseIdKey)
         }
     }
-    public var submittedPushToken: String? {
+    internal var submittedPushToken: String? {
         get {
             UserDefaults.standard.string(forKey: submittedPushTokenKey)
         }
@@ -218,7 +218,7 @@ public class ApphudInternal: NSObject {
 
     // MARK: - Initialization
 
-    public func initialize(apiKey: String, inputUserID: String?, inputDeviceID: String? = nil, observerMode: Bool) {
+    internal func initialize(apiKey: String, inputUserID: String?, inputDeviceID: String? = nil, observerMode: Bool) {
 
         if httpClient == nil {
             ApphudStoreKitWrapper.shared.setupObserver()
@@ -236,7 +236,7 @@ public class ApphudInternal: NSObject {
         identify(inputUserID: inputUserID, inputDeviceID: inputDeviceID, observerMode: observerMode)
     }
 
-    public func identify(inputUserID: String?, inputDeviceID: String? = nil, observerMode: Bool) {
+    internal func identify(inputUserID: String?, inputDeviceID: String? = nil, observerMode: Bool) {
 
         ApphudUtils.shared.storeKitObserverMode = observerMode
 
@@ -295,7 +295,7 @@ public class ApphudInternal: NSObject {
        return self.currentUser?.subscriptions.count ?? 0 > 0 || self.currentUser?.purchases.count ?? 0 > 0
     }
 
-    public var cacheTimeout: TimeInterval {
+    internal var cacheTimeout: TimeInterval {
         apphudIsSandbox() ? 60 : 90000
     }
 
@@ -307,14 +307,14 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func logout() {
+    internal func logout() {
         ApphudUser.clearCache()
         ApphudKeychain.resetValues()
         allowIdentifyUser = true
         apphudLog("User logged out. Apphud SDK is uninitialized.", logLevel: .all)
     }
 
-    public func continueToRegisteringUser(skipRegistration: Bool = false, needToUpdateProductGroups: Bool = true) {
+    internal func continueToRegisteringUser(skipRegistration: Bool = false, needToUpdateProductGroups: Bool = true) {
         guard !isRegisteringUser else {return}
         isRegisteringUser = true
         continueToFetchProducts(needToUpdateProductGroups: needToUpdateProductGroups)
@@ -418,7 +418,7 @@ public class ApphudInternal: NSObject {
     // MARK: - Perform Blocks
 
     /// Returns false if current user is not yet registered, block is added to array and will be performed later.
-    @discardableResult public func performWhenUserRegistered(callback : @escaping ApphudVoidCallback) -> Bool {
+    @discardableResult internal func performWhenUserRegistered(callback : @escaping ApphudVoidCallback) -> Bool {
         if currentUser != nil {
             callback()
             return true
@@ -443,7 +443,7 @@ public class ApphudInternal: NSObject {
     }
 
     /// Returns false if products groups map dictionary not yet received, block is added to array and will be performed later.
-    @discardableResult public func performWhenProductGroupsFetched(callback : @escaping ApphudVoidCallback) -> Bool {
+    @discardableResult internal func performWhenProductGroupsFetched(callback : @escaping ApphudVoidCallback) -> Bool {
         if self.productGroups.count > 0 {
             callback()
             return true
@@ -453,7 +453,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func performAllProductGroupsFetchedCallbacks() {
+    internal func performAllProductGroupsFetchedCallbacks() {
         for block in productGroupsFetchedCallbacks {
             apphudLog("Performing scheduled block..")
             block()
@@ -465,7 +465,7 @@ public class ApphudInternal: NSObject {
     }
 
     /// Returns false if products groups map dictionary not yet received, block is added to array and will be performed later.
-    @discardableResult public func performWhenStoreKitProductFetched(callback : @escaping ApphudVoidCallback) -> Bool {
+    @discardableResult internal func performWhenStoreKitProductFetched(callback : @escaping ApphudVoidCallback) -> Bool {
         if ApphudStoreKitWrapper.shared.didFetch {
             callback()
             return true
@@ -475,7 +475,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func performAllStoreKitProductsFetchedCallbacks() {
+    internal func performAllStoreKitProductsFetchedCallbacks() {
         for block in storeKitProductsFetchedCallbacks {
             apphudLog("Performing scheduled block..")
             block()
@@ -488,7 +488,7 @@ public class ApphudInternal: NSObject {
 
     // MARK: - Push Notifications API
 
-    public func submitPushNotificationsToken(token: Data, callback: ApphudBoolCallback?) {
+    internal func submitPushNotificationsToken(token: Data, callback: ApphudBoolCallback?) {
         performWhenUserRegistered {
 
             let tokenString = token.map { String(format: "%02.2hhx", $0) }.joined()
@@ -509,7 +509,7 @@ public class ApphudInternal: NSObject {
 
     // MARK: - V2 API
 
-    public func trackDurationLogs(params: [[String: AnyHashable]], callback: @escaping () -> Void) {
+    internal func trackDurationLogs(params: [[String: AnyHashable]], callback: @escaping () -> Void) {
         let result = performWhenUserRegistered {
             var final_params: [String: AnyHashable] = ["device_id": self.currentDeviceID,
                                                        "user_id": self.currentUserID,
@@ -529,7 +529,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func trackEvent(params: [String: AnyHashable], callback: @escaping () -> Void) {
+    internal func trackEvent(params: [String: AnyHashable], callback: @escaping () -> Void) {
         let result = performWhenUserRegistered {
             let final_params: [String: AnyHashable] = ["device_id": self.currentDeviceID].merging(params, uniquingKeysWith: {(current, _) in current})
             self.httpClient?.startRequest(path: .events, apiVersion: .APIV2, params: final_params, method: .post) { (_, _, _, _, _, _) in
@@ -541,7 +541,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    @objc public func trackPaywallEvent(params: [String: AnyHashable]) {
+    @objc internal func trackPaywallEvent(params: [String: AnyHashable]) {
         if self.lastUploadedPaywallEvent == params && Date().timeIntervalSince(lastUploadedPaywallEventDate ?? Date()) <= 2 {
             apphudLog("Skip paywall event bacause the same event just been uploaded")
             return
@@ -582,7 +582,7 @@ public class ApphudInternal: NSObject {
         apphudLog("Scheduled paywall events retry in \(delay) seconds.", forceDisplay: true)
     }
 
-    public func submitPaywallEvent(params: [String: AnyHashable], callback: @escaping ApphudHTTPResponseCallback) {
+    internal func submitPaywallEvent(params: [String: AnyHashable], callback: @escaping ApphudHTTPResponseCallback) {
         let result = performWhenUserRegistered {
             let environment = Apphud.isSandbox() ? "sandbox" : "production"
             let final_params: [String: AnyHashable] = ["device_id": self.currentDeviceID,
@@ -598,7 +598,7 @@ public class ApphudInternal: NSObject {
     }
 
     /// Not used yet
-    public func getRule(ruleID: String, callback: @escaping (ApphudRule?) -> Void) {
+    internal func getRule(ruleID: String, callback: @escaping (ApphudRule?) -> Void) {
 
         let result = performWhenUserRegistered {
             let params = ["device_id": self.currentDeviceID] as [String: String]
@@ -617,7 +617,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func checkForUnreadNotifications() {
+    internal func checkForUnreadNotifications() {
         #if os(iOS)
         performWhenUserRegistered {
             let params = ["device_id": self.currentDeviceID] as [String: String]
@@ -634,7 +634,7 @@ public class ApphudInternal: NSObject {
         #endif
     }
 
-    public func readAllNotifications(for ruleID: String) {
+    internal func readAllNotifications(for ruleID: String) {
         performWhenUserRegistered {
             let params = ["device_id": self.currentDeviceID, "rule_id": ruleID] as [String: String]
             self.httpClient?.startRequest(path: .readNotifications, apiVersion: .APIV2, params: params, method: .post, callback: { (_, _, _, _, _, _) in
@@ -642,7 +642,7 @@ public class ApphudInternal: NSObject {
         }
     }
 
-    public func getActiveRuleScreens(_ callback: @escaping ([String]) -> Void) {
+    internal func getActiveRuleScreens(_ callback: @escaping ([String]) -> Void) {
         performWhenUserRegistered {
             self.httpClient?.startRequest(path: .screens, apiVersion: .APIV2, params: nil, method: .get) { result, response, _, _, _, _ in
                 if result, let dataDict = response?["data"] as? [String: Any], let screensIdsArray = dataDict["results"] as? [String] {

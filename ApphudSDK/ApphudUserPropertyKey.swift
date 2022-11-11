@@ -65,5 +65,5 @@ public let ApphudUserPropertyKeyGender = "$gender"
         self.key = key
     }
 
-    public let key: String
+    internal let key: String
 }

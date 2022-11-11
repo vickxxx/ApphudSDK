@@ -14,7 +14,7 @@ extension ApphudInternal {
 
     // MARK: - Main Purchase and Submit Receipt methods
 
-    public func restorePurchases(callback: @escaping ([ApphudSubscription]?, [ApphudNonRenewingPurchase]?, Error?) -> Void) {
+    internal func restorePurchases(callback: @escaping ([ApphudSubscription]?, [ApphudNonRenewingPurchase]?, Error?) -> Void) {
         self.restorePurchasesCallback = { subs, purchases, error in
             if error != nil { ApphudStoreKitWrapper.shared.restoreTransactions() }
             callback(subs, purchases, error)
@@ -22,7 +22,7 @@ extension ApphudInternal {
         self.submitReceiptRestore(allowsReceiptRefresh: true, transaction: nil)
     }
 
-    public func submitReceiptAutomaticPurchaseTracking(transaction: SKPaymentTransaction, callback: @escaping ((ApphudPurchaseResult) -> Void)) {
+    internal func submitReceiptAutomaticPurchaseTracking(transaction: SKPaymentTransaction, callback: @escaping ((ApphudPurchaseResult) -> Void)) {
 
         performWhenUserRegistered {
             
@@ -39,11 +39,11 @@ extension ApphudInternal {
         }
     }
 
-    @objc public func submitAppStoreReceipt() {
+    @objc internal func submitAppStoreReceipt() {
         submitReceiptRestore(allowsReceiptRefresh: false, transaction: nil)
     }
 
-    public func submitReceiptRestore(allowsReceiptRefresh: Bool, transaction: SKPaymentTransaction?) {
+    internal func submitReceiptRestore(allowsReceiptRefresh: Bool, transaction: SKPaymentTransaction?) {
         
         let receiptString = apphudReceiptDataString()
         
@@ -73,7 +73,7 @@ extension ApphudInternal {
         }
     }
 
-    public func submitReceipt(product: SKProduct, transaction: SKPaymentTransaction?, apphudProduct: ApphudProduct? = nil, callback: ((ApphudPurchaseResult) -> Void)?) {
+    internal func submitReceipt(product: SKProduct, transaction: SKPaymentTransaction?, apphudProduct: ApphudProduct? = nil, callback: ((ApphudPurchaseResult) -> Void)?) {
 
         let block: (String?) -> Void = { receiptStr in
             let exist = self.performWhenUserRegistered {
@@ -108,7 +108,7 @@ extension ApphudInternal {
         }
     }
 
-    public func submitReceipt(product: SKProduct?, apphudProduct: ApphudProduct?, transaction: SKPaymentTransaction?, receiptString: String?, notifyDelegate: Bool, eligibilityCheck: Bool = false, callback: ApphudErrorCallback?) {
+    internal func submitReceipt(product: SKProduct?, apphudProduct: ApphudProduct?, transaction: SKPaymentTransaction?, receiptString: String?, notifyDelegate: Bool, eligibilityCheck: Bool = false, callback: ApphudErrorCallback?) {
 
         if callback != nil {
             if eligibilityCheck || self.submitReceiptCallbacks.count > 0 {
@@ -200,7 +200,7 @@ extension ApphudInternal {
         }
     }
 
-    public func scheduleSubmitReceiptRetry(error: Error?, code: Int) {
+    internal func scheduleSubmitReceiptRetry(error: Error?, code: Int) {
         guard httpClient != nil, httpClient!.canRetry else {
             return
         }
@@ -215,7 +215,7 @@ extension ApphudInternal {
 
     // MARK: - Internal purchase methods
 
-    public func purchase(productId: String, product: ApphudProduct?, validate: Bool, callback: ((ApphudPurchaseResult) -> Void)?) {
+    internal func purchase(productId: String, product: ApphudProduct?, validate: Bool, callback: ((ApphudPurchaseResult) -> Void)?) {
         if let apphudProduct = product, let skProduct = apphudProduct.skProduct {
             purchase(product: skProduct, apphudProduct: apphudProduct, validate: validate, callback: callback)
         } else {
@@ -238,7 +238,7 @@ extension ApphudInternal {
     }
 
     @available(iOS 12.2, *)
-    public func purchasePromo(skProduct: SKProduct, apphudProduct: ApphudProduct?, discountID: String, callback: ((ApphudPurchaseResult) -> Void)?) {
+    internal func purchasePromo(skProduct: SKProduct, apphudProduct: ApphudProduct?, discountID: String, callback: ((ApphudPurchaseResult) -> Void)?) {
 
         self.signPromoOffer(productID: skProduct.productIdentifier, discountID: discountID) { (paymentDiscount, _) in
             if let paymentDiscount = paymentDiscount {
@@ -274,7 +274,7 @@ extension ApphudInternal {
         }
     }
     
-    public func willPurchaseProductFromPaywall(identifier: String?)  {
+    internal func willPurchaseProductFromPaywall(identifier: String?)  {
         observerModePurchasePaywallIdentifier = identifier
     }
 

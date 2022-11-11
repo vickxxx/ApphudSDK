@@ -8,18 +8,18 @@
 
 import Foundation
 
-public struct ApphudAPIDataResponse<T: Decodable>: Decodable {
+internal struct ApphudAPIDataResponse<T: Decodable>: Decodable {
     var data: T
 }
 
-public struct ApphudAPIArrayResponse<T: Decodable>: Decodable {
+internal struct ApphudAPIArrayResponse<T: Decodable>: Decodable {
     var results: [T]
 }
 
 typealias ApphudHTTPResponseCallback = (Bool, [String: Any]?, Data?, Error?, Int, Double) -> Void
 typealias ApphudStringCallback = (String?, Error?) -> Void
 /**
- This is Apphud's public class.
+ This is Apphud's internal class.
  */
 @available(OSX 10.14.4, *)
 @available(iOS 11.2, *)
@@ -91,15 +91,15 @@ public class ApphudHttpClient {
     public var domainUrlString = productionEndpoint
     #endif
 
-    public var apiKey: String = ""
+    internal var apiKey: String = ""
 
-    public var canRetry: Bool {
+    internal var canRetry: Bool {
         !invalidAPiKey && !unauthorized
     }
 
-    public var invalidAPiKey: Bool = false
-    public var unauthorized: Bool = false
-    public var suspended: Bool = false
+    internal var invalidAPiKey: Bool = false
+    internal var unauthorized: Bool = false
+    internal var suspended: Bool = false
     
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
@@ -112,13 +112,13 @@ public class ApphudHttpClient {
     private let POST_CUSTOMERS_TIMEOUT: TimeInterval = 10.0
     private let POST_TIMEOUT: TimeInterval = 30.0
 
-    public func requestInstance(url: URL) -> URLRequest? {
+    internal func requestInstance(url: URL) -> URLRequest? {
         var request = URLRequest(url: url)
         request.setValue(apiKey, forHTTPHeaderField: "APPHUD-API-KEY")
         return request
     }
 
-    public func startRequest(path: ApphudEndpoint, apiVersion: ApphudApiVersion = .APIV1, params: [String: Any]?, method: ApphudHttpMethod, useDecoder: Bool = false, callback: ApphudHTTPResponseCallback?) {
+    internal func startRequest(path: ApphudEndpoint, apiVersion: ApphudApiVersion = .APIV1, params: [String: Any]?, method: ApphudHttpMethod, useDecoder: Bool = false, callback: ApphudHTTPResponseCallback?) {
         
         let timeout = path == .customers ? POST_CUSTOMERS_TIMEOUT : nil
         
@@ -129,7 +129,7 @@ public class ApphudHttpClient {
         }
     }
 
-    public func loadScreenHtmlData(screenID: String, callback: @escaping (String?, Error?) -> Void) {
+    internal func loadScreenHtmlData(screenID: String, callback: @escaping (String?, Error?) -> Void) {
 
         if let data = cachedScreenData(id: screenID), let string = String(data: data, encoding: .utf8) {
             callback(string, nil)
@@ -185,7 +185,7 @@ public class ApphudHttpClient {
         try? html.write(to: url)
     }
 
-    public func makeScreenRequest(screenID: String) -> URLRequest? {
+    internal func makeScreenRequest(screenID: String) -> URLRequest? {
 
         let deviceID: String = ApphudInternal.shared.currentDeviceID
         let urlString = "\(domainUrlString)/preview_screen/\(screenID)?api_key=\(apiKey)&locale=\(Locale.current.identifier)&device_id=\(deviceID)&v=2"
@@ -266,7 +266,7 @@ public class ApphudHttpClient {
         return request
     }
 
-    public func start(request: URLRequest, callback: @escaping ApphudStringCallback) {
+    internal func start(request: URLRequest, callback: @escaping ApphudStringCallback) {
         let task = session.dataTask(with: request) { (data, _, error) in
             var string: String?
             if data != nil {

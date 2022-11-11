@@ -10,7 +10,7 @@ import Foundation
 import StoreKit
 
 #if os(iOS)
-public class ApphudNavigationController: UINavigationController {
+internal class ApphudNavigationController: UINavigationController {
 
     private var pendingScreens = [ApphudScreenController]()
 

@@ -32,15 +32,15 @@ public class ApphudUtils: NSObject {
 
     internal static let shared = ApphudUtils()
     private(set) var logLevel: ApphudLogLevel = .off
-    public var storeKitObserverMode = false
-    public var optOutOfIDFACollection = false
+    internal var storeKitObserverMode = false
+    internal var optOutOfIDFACollection = false
 }
 
-public func apphudLog(_ text: String, forceDisplay: Bool = false) {
+internal func apphudLog(_ text: String, forceDisplay: Bool = false) {
     apphudLog(text, logLevel: forceDisplay ? .off : .debug)
 }
 
-public func apphudLog(_ text: String, logLevel: ApphudLogLevel) {
+internal func apphudLog(_ text: String, logLevel: ApphudLogLevel) {
     if  ApphudUtils.shared.logLevel.rawValue >= logLevel.rawValue {
         let formatter = DateFormatter()
         formatter.dateStyle = .none

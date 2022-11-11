@@ -40,7 +40,7 @@ public class ApphudGroup: NSObject, Codable {
 
     // MARK: - Private
 
-    public var id: String
+    internal var id: String
 
     private enum CodingKeys: String, CodingKey {
         case id

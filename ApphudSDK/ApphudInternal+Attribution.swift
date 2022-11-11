@@ -12,7 +12,7 @@ import Foundation
 extension ApphudInternal {
 
     // MARK: - Attribution
-    public func addAttribution(data: [AnyHashable: Any]?, from provider: ApphudAttributionProvider, identifer: String? = nil, callback: ((Bool) -> Void)?) {
+    internal func addAttribution(data: [AnyHashable: Any]?, from provider: ApphudAttributionProvider, identifer: String? = nil, callback: ((Bool) -> Void)?) {
         performWhenUserRegistered {
 
             var params: [String: Any] = ["device_id": self.currentDeviceID]
@@ -171,7 +171,7 @@ extension ApphudInternal {
         }
     }
 
-    @objc public func getAppleAttribution(_ appleAttibutionToken: String, completion: @escaping ([AnyHashable: Any]?) -> Void) {
+    @objc internal func getAppleAttribution(_ appleAttibutionToken: String, completion: @escaping ([AnyHashable: Any]?) -> Void) {
         let request = NSMutableURLRequest(url: URL(string: "https://api-adservices.apple.com/api/v1/")!)
         request.httpMethod = "POST"
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
@@ -193,14 +193,14 @@ extension ApphudInternal {
         task.resume()
     }
 
-    @objc public func forceSendAttributionDataIfNeeded() {
+    @objc internal func forceSendAttributionDataIfNeeded() {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(forceSendAttributionDataIfNeeded), object: nil)
         automaticallySubmitAppsFlyerAttributionIfNeeded()
         automaticallySubmitAdjustAttributionIfNeeded()
         automaticallySubmitFacebookAttributionIfNeeded()
     }
 
-    @objc public func automaticallySubmitAppsFlyerAttributionIfNeeded() {
+    @objc internal func automaticallySubmitAppsFlyerAttributionIfNeeded() {
 
         guard !didSubmitAppsFlyerAttribution && apphudIsAppsFlyerSDKIntegrated() else {
             return
@@ -214,7 +214,7 @@ extension ApphudInternal {
         }
     }
 
-    @objc public func automaticallySubmitAdjustAttributionIfNeeded() {
+    @objc internal func automaticallySubmitAdjustAttributionIfNeeded() {
 
         guard !didSubmitAdjustAttribution && apphudIsAdjustSDKIntegrated() else {
             return
@@ -241,7 +241,7 @@ extension ApphudInternal {
         }
     }
 
-    @objc public func automaticallySubmitFacebookAttributionIfNeeded() {
+    @objc internal func automaticallySubmitFacebookAttributionIfNeeded() {
         guard !didSubmitFacebookAttribution && apphudIsFBSDKIntegrated() else {
             return
         }
