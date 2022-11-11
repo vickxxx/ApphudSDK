@@ -52,7 +52,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         self.purchases = inapps.sorted { return $0.purchasedAt > $1.purchasedAt }
     }
 
-    func subscriptionsStates() -> [[String: AnyHashable]] {
+    public func subscriptionsStates() -> [[String: AnyHashable]] {
         var array = [[String: AnyHashable]]()
         for subscription in self.subscriptions {
             var dict = [String: AnyHashable]()
@@ -65,7 +65,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         return array
     }
 
-    func purchasesStates() -> [[String: AnyHashable]] {
+    public func purchasesStates() -> [[String: AnyHashable]] {
         var array = [[String: AnyHashable]]()
         for purchase in self.purchases {
             var dict = [String: AnyHashable]()
@@ -77,9 +77,9 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         return array
     }
 
-    static let userDataFileName = "ApphudUser.data"
+    public static let userDataFileName = "ApphudUser.data"
 
-    static func toCache(_ dictionary: [String: Any]) {
+    public static func toCache(_ dictionary: [String: Any]) {
 
         let data = try? NSKeyedArchiver.archivedData(withRootObject: dictionary, requiringSecureCoding: false)
         guard let folderURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {return}
@@ -92,7 +92,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         }
     }
 
-    static func fromCache(directory: FileManager.SearchPathDirectory) -> ApphudUser? {
+    public static func fromCache(directory: FileManager.SearchPathDirectory) -> ApphudUser? {
         do {
             if let documentsURL = FileManager.default.urls(for: directory, in: .userDomainMask).first {
                 let fileURL = documentsURL.appendingPathComponent(userDataFileName)
@@ -113,7 +113,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         return nil
     }
 
-    static func fromCache() -> ApphudUser? {
+    public static func fromCache() -> ApphudUser? {
         if let user = fromCache(directory: .applicationSupportDirectory) {
             return user
         } else {
@@ -121,7 +121,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
         }
     }
 
-    static func clearCache() {
+    public static func clearCache() {
         guard let folderURLAppSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {return}
         guard let folderURLCaches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {return}
         let fileURLOne = folderURLAppSupport.appendingPathComponent(userDataFileName)
