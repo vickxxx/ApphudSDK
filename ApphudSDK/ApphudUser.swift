@@ -15,15 +15,15 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
     /**
      Unique user identifier. This can be updated later.
      */
-    var user_id: String
+    public var user_id: String
     /**
      An array of subscriptions that user has ever purchased.
      */
-    var subscriptions: [ApphudSubscription]
-    var purchases: [ApphudNonRenewingPurchase]
+    public var subscriptions: [ApphudSubscription]
+    public var purchases: [ApphudNonRenewingPurchase]
 
-    var currencyCode: String?
-    var countryCode: String?
+    public var currencyCode: String?
+    public var countryCode: String?
 
     // MARK: - Private methods
 
