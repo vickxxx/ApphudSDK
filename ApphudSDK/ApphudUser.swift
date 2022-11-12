@@ -27,7 +27,7 @@ private let ApphudUserCacheKey = "ApphudUserCacheKey"
 
     // MARK: - Private methods
 
-    init?(dictionary: [String: Any]) {
+    public init?(dictionary: [String: Any]) {
         guard let userID = dictionary["user_id"] as? String else { return nil }
         self.user_id = userID
 
