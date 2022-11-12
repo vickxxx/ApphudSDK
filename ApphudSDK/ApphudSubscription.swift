@@ -112,7 +112,7 @@ public class ApphudSubscription: NSObject {
     // MARK: - Private methods
 
     /// Subscription private initializer
-    init?(dictionary: [String: Any]) {
+    public init?(dictionary: [String: Any]) {
         guard let expDate = (dictionary["expires_at"] as? String ?? "").apphudIsoDate else {return nil}
         id = dictionary["id"] as? String ?? ""
         expiresDate = expDate
@@ -133,7 +133,7 @@ public class ApphudSubscription: NSObject {
     }
 
     /// have to write this code because obj-c doesn't support enum to be string
-    private static func statusFrom(string: String) -> ApphudSubscriptionStatus {
+    public static func statusFrom(string: String) -> ApphudSubscriptionStatus {
         switch string {
         case "trial":
             return .trial
